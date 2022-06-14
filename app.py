@@ -21,6 +21,10 @@ def add_teacher():
   repository.executeQuery(sql,data) 
   return "teacher created successfully"
 
+@app.route('/teacher', methods=['GET'])
+def add_teacher():
+  return "teachers fetched successfully"
+
 @app.route('/initdb')
 def db_init():
   DB_Inited = InitDB()
