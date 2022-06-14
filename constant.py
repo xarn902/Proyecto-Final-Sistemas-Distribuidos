@@ -1,0 +1,9 @@
+HOST_DB1 = "mysqldb"
+HOST_DB2 = "mysqldb"
+USER_DB = "root"
+PASSWORD_DB = "p@ssw0rd1"
+DB1_NAME="clases"
+DB2_NAME="clases2"
+
+QUERY_CREATE_DB1 = "CREATE DATABASE IF NOT EXISTS clases"
+QUERY_CREATE_DB2 = "CREATE DATABASE IF NOT EXISTS clases2"
