@@ -22,8 +22,14 @@ def add_teacher():
   return "teacher created successfully"
 
 @app.route('/teacher', methods=['GET'])
-def add_teacher():
+def get_teacher():
   return "teachers fetched successfully"
+
+@app.route('/synchronize', methods=['GET'])
+def synchronizeDB():
+  repository = Repository()
+  repository.synchronizeDB()
+  return "Database synchronized successfully"
 
 @app.route('/initdb')
 def db_init():

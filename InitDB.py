@@ -27,6 +27,7 @@ class InitDB:
     cursor.execute("CREATE TABLE IF NOT EXISTS course (course_code BIGINT NOT NULL ,course_name VARCHAR(255), PRIMARY KEY (course_code))")
     cursor.execute("CREATE TABLE IF NOT EXISTS class (class_code BIGINT NOT NULL , class_course_code BIGINT NOT NULL , class_teacher_code BIGINT NOT NULL , year VARCHAR(255) , period VARCHAR(255) , PRIMARY KEY (class_code), FOREIGN KEY (class_course_code) REFERENCES course(course_code) , FOREIGN KEY (class_teacher_code) REFERENCES teacher(teacher_code))")
     cursor.execute("CREATE TABLE IF NOT EXISTS class_stundent_note (class_code BIGINT NOT NULL , student_code BIGINT NOT NULL , note DECIMAL(1,1) ,  PRIMARY KEY (class_code,student_code), FOREIGN KEY (class_code) REFERENCES class(class_code) , FOREIGN KEY (student_code) REFERENCES student(student_code))")
+    cursor.execute("CREATE TABLE IF NOT EXISTS backup (query TEXT(255))")
     mydb.commit()
 
     cursor.close()
@@ -56,6 +57,7 @@ class InitDB:
     cursor.execute("CREATE TABLE IF NOT EXISTS course (course_code BIGINT NOT NULL ,course_name VARCHAR(255), PRIMARY KEY (course_code))")
     cursor.execute("CREATE TABLE IF NOT EXISTS class (class_code BIGINT NOT NULL , class_course_code BIGINT NOT NULL , class_teacher_code BIGINT NOT NULL , year VARCHAR(255) , period VARCHAR(255) , PRIMARY KEY (class_code), FOREIGN KEY (class_course_code) REFERENCES course(course_code) , FOREIGN KEY (class_teacher_code) REFERENCES teacher(teacher_code))")
     cursor.execute("CREATE TABLE IF NOT EXISTS class_stundent_note (class_code BIGINT NOT NULL , student_code BIGINT NOT NULL , note DECIMAL(1,1) ,  PRIMARY KEY (class_code,student_code), FOREIGN KEY (class_code) REFERENCES class(class_code) , FOREIGN KEY (student_code) REFERENCES student(student_code))")
+    cursor.execute("CREATE TABLE IF NOT EXISTS backup (query TEXT(255))")
     mydb.commit()
 
     cursor.close()
