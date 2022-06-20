@@ -17,7 +17,7 @@ class Repository:
         cursor2 = None
         mydb = None
         mydb2 = None
-        comparationDBVersion = None
+        comparationDBVersion = 0
 
         try:
             mydb = mysql.connector.connect(
@@ -50,17 +50,73 @@ class Repository:
 
         if isConnectionDB1 and (comparationDBVersion == 0 or comparationDBVersion == 1):
             cursor1.execute(query, data)
-            cursor1.execute("INSERT INTO backup (query) VALUES(%s)", (query,))
+            cursor1.execute("INSERT INTO backup (query,data) VALUES(%s,%s)", (query,str(data)))
             mydb.commit()
             cursor1.close() 
             mydb.close()
         
         if isConnectionDB2 and (comparationDBVersion == 0 or comparationDBVersion == 2):
             cursor2.execute(query, data)
-            cursor2.execute("INSERT INTO backup (query) VALUES(%s)", (query,))
+            cursor2.execute("INSERT INTO backup (query,data) VALUES(%s,%s)", (query,str(data)))
             mydb2.commit()
             cursor2.close() 
             mydb2.close()
+
+    def executeSelectQuery(self , query):
+        isConnectionDB1 = False
+        isConnectionDB2 = False
+        cursor1 = None
+        cursor2 = None
+        mydb = None
+        mydb2 = None
+        comparationDBVersion = 0
+        resultQuery = None
+        resultHeaders= None
+
+        try:
+            mydb = mysql.connector.connect(
+                host= constant.HOST_DB1,
+                user=constant.USER_DB,
+                password=constant.PASSWORD_DB,
+                database=constant.DB1_NAME
+            )
+            cursor1 = mydb.cursor()
+            isConnectionDB1 = True
+        except:
+            logging.info("couldn't connect to DB1")
+
+        try:
+            mydb2 = mysql.connector.connect(
+                host= constant.HOST_DB2,
+                user=constant.USER_DB,
+                password=constant.PASSWORD_DB,
+                database=constant.DB2_NAME
+            )
+            cursor2 = mydb2.cursor()
+            isConnectionDB2 = True
+        except:
+            logging.info("couldn't connect to DB2")
+
+        
+        if isConnectionDB1 and isConnectionDB2 :
+            comparationDBVersion = self.validateDBVersion(cursor1,cursor2)
+            logging.info("Validation of the dataBase Version: %s" , comparationDBVersion)
+
+        if isConnectionDB1 and (comparationDBVersion == 0 or comparationDBVersion == 1):
+            cursor1.execute(query)
+            resultHeaders = [x[0] for x in cursor1.description] 
+            resultQuery = cursor1.fetchall()
+            cursor1.close() 
+            mydb.close()
+        
+        if isConnectionDB2 and (comparationDBVersion == 0 or comparationDBVersion == 2):
+            cursor2.execute(query)
+            resultHeaders = [x[0] for x in cursor2.description] 
+            resultQuery = cursor2.fetchall()
+            cursor2.close() 
+            mydb2.close()
+
+        return resultQuery,resultHeaders
 
 
     def validateDBVersion(self, cursorBD1 , cursorDB2 ):
@@ -125,33 +181,33 @@ class Repository:
             resultsDB1 = cursor1.fetchall()
             cursor2.execute("SELECT * FROM backup")
             resultsDB2 = cursor2.fetchall()
-            listResultStringDB1 = []
-            listResultStringDB2 = []
-            for result in resultsDB1:
-                listResultStringDB1.append(result[0])
-            for result in resultsDB2:
-                listResultStringDB2.append(result[0])
             if comparationDBVersion == 1 :
-                diff = list(set(listResultStringDB1) - set(listResultStringDB2))
+                diff = resultsDB1[len(resultsDB2):]
                 for sql in diff:
-                    cursor2.execute(sql)
-                    cursor2.execute("INSERT INTO backup (query) VALUES(%s)", (sql,))
+                    cursor2.execute(sql[0], self.stringToTuple(sql[1]))
+                    cursor2.execute("INSERT INTO backup (query,data) VALUES(%s,%s)", sql)
             if comparationDBVersion == 2 :
-                diff = list(set(listResultStringDB2) - set(listResultStringDB1))
+                diff = resultsDB2[len(resultsDB1):]
                 for sql in diff:
-                    cursor1.execute(sql)
-                    cursor1.execute("INSERT INTO backup (query) VALUES(%s)", (sql,))
-
-
-
-
+                    cursor1.execute(sql[0], self.stringToTuple(sql[1]))
+                    cursor1.execute("INSERT INTO backup (query,data) VALUES(%s,%s)", sql)
+            
+            mydb.commit()
+            cursor1.close() 
+            mydb.close()
+            mydb2.commit()
+            cursor2.close() 
+            mydb2.close()
         else:
             logging.info("couldn't synchronize DBs")
 
+    def stringToTuple(self, stringTuple):
+        stringTuple = stringTuple.replace("(","")
+        stringTuple = stringTuple.replace(")","")
+        stringTuple = stringTuple.replace("'","")
+        stringSplited = stringTuple.split(",")
+        stringSplited = [s.strip() for s in stringSplited ]
+        sortedTuple = tuple(stringSplited)
+        return sortedTuple
 
-strinset = strinset.replace("(","")
-strinset = strinset.replace(")","")
-strinset = strinset.replace("'","")
-stringSplited = strinset.split(",")
-stringSplited = [s.strip() for s in stringSplited ]
-sortedset = sorted(set(stringSplited), key=stringSplited.index)
+            

@@ -20,10 +20,39 @@ def add_teacher():
   data = (_code, _name, _lastName,)
   repository.executeQuery(sql,data) 
   return "teacher created successfully"
+  
+@app.route('/teacher/<id>', methods=['PUT'])
+def update_teacher(id):
+  repository = Repository()
+  json_data = request.get_json(force=True)
+  _name = json_data['name']
+  _lastName = json_data['lastName']
+  sql = "UPDATE teacher SET teacher_name = %s , teacher_last_name = %s WHERE teacher_code = %s"
+  data = (_name, _lastName, id)
+  repository.executeQuery(sql,data) 
+  return "teacher updated successfully"
 
 @app.route('/teacher', methods=['GET'])
 def get_teacher():
-  return "teachers fetched successfully"
+  repository = Repository()
+  results, row_headers= repository.executeSelectQuery("SELECT * FROM teacher") 
+  print(results)
+  json_data= []
+  for result in results:
+    print(result)
+    json_data.append(dict(zip(row_headers,result)))
+  return json.dumps(json_data)
+
+@app.route('/teacher/<id>', methods=['GET'])
+def find_teacher(id):
+  repository = Repository()
+  results, row_headers= repository.executeSelectQuery("SELECT * FROM teacher WHERE teacher_code={}".format(id)) 
+  print(results)
+  json_data= []
+  for result in results:
+    print(result)
+    json_data.append(dict(zip(row_headers,result)))
+  return json.dumps(json_data)
 
 @app.route('/synchronize', methods=['GET'])
 def synchronizeDB():
