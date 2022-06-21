@@ -1,7 +1,8 @@
-HOST_DB1 = "mysqldb"
-HOST_DB2 = "mysqldb"
-USER_DB = "root"
-PASSWORD_DB = "p@ssw0rd1"
+HOST_DB1 = "notas-aws.cvjcytn72njy.us-east-1.rds.amazonaws.com"
+HOST_DB2 = "notasazure.mysql.database.azure.com"
+USER_DB1 = "notasroot"
+USER_DB2 = "notasroot@notasazure"
+PASSWORD_DB = "password01*"
 DB1_NAME="clases"
 DB2_NAME="clases2"
 

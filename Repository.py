@@ -22,7 +22,7 @@ class Repository:
         try:
             mydb = mysql.connector.connect(
                 host= constant.HOST_DB1,
-                user=constant.USER_DB,
+                user=constant.USER_DB1,
                 password=constant.PASSWORD_DB,
                 database=constant.DB1_NAME
             )
@@ -34,7 +34,7 @@ class Repository:
         try:
             mydb2 = mysql.connector.connect(
                 host= constant.HOST_DB2,
-                user=constant.USER_DB,
+                user=constant.USER_DB2,
                 password=constant.PASSWORD_DB,
                 database=constant.DB2_NAME
             )
@@ -76,7 +76,7 @@ class Repository:
         try:
             mydb = mysql.connector.connect(
                 host= constant.HOST_DB1,
-                user=constant.USER_DB,
+                user=constant.USER_DB1,
                 password=constant.PASSWORD_DB,
                 database=constant.DB1_NAME
             )
@@ -88,7 +88,7 @@ class Repository:
         try:
             mydb2 = mysql.connector.connect(
                 host= constant.HOST_DB2,
-                user=constant.USER_DB,
+                user=constant.USER_DB2,
                 password=constant.PASSWORD_DB,
                 database=constant.DB2_NAME
             )
@@ -154,7 +154,7 @@ class Repository:
         try:
             mydb = mysql.connector.connect(
                 host= constant.HOST_DB1,
-                user=constant.USER_DB,
+                user=constant.USER_DB1,
                 password=constant.PASSWORD_DB,
                 database=constant.DB1_NAME
             )
@@ -166,7 +166,7 @@ class Repository:
         try:
             mydb2 = mysql.connector.connect(
                 host= constant.HOST_DB2,
-                user=constant.USER_DB,
+                user=constant.USER_DB2,
                 password=constant.PASSWORD_DB,
                 database=constant.DB2_NAME
             )

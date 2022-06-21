@@ -6,7 +6,7 @@ class InitDB:
   def initDB1(self):
     mydb = mysql.connector.connect(
       host= constant.HOST_DB1,
-      user=constant.USER_DB,
+      user=constant.USER_DB1,
       password=constant.PASSWORD_DB
     )
     cursor = mydb.cursor()
@@ -16,7 +16,7 @@ class InitDB:
 
     mydb = mysql.connector.connect(
       host= constant.HOST_DB1,
-      user=constant.USER_DB,
+      user=constant.USER_DB1,
       password=constant.PASSWORD_DB,
       database=constant.DB1_NAME
     )
@@ -36,7 +36,7 @@ class InitDB:
   def initDB2(self):
     mydb = mysql.connector.connect(
       host= constant.HOST_DB2,
-      user=constant.USER_DB,
+      user=constant.USER_DB2,
       password=constant.PASSWORD_DB
     )
     cursor = mydb.cursor()
@@ -46,7 +46,7 @@ class InitDB:
 
     mydb = mysql.connector.connect(
       host= constant.HOST_DB2,
-      user=constant.USER_DB,
+      user=constant.USER_DB2,
       password=constant.PASSWORD_DB,
       database=constant.DB2_NAME
     )
