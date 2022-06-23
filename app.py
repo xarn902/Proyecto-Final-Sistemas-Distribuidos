@@ -54,6 +54,53 @@ def find_teacher(id):
     json_data.append(dict(zip(row_headers,result)))
   return json.dumps(json_data)
 
+
+### Student APIs
+@app.route('/student', methods=['POST'])
+def add_student():
+  repository = Repository()
+  json_data = request.get_json(force=True)
+  _code = json_data['code']
+  _name = json_data['name']
+  _lastName = json_data['lastName']
+  sql = "INSERT INTO student (student_code, student_name, lstudent_ast_name)VALUES(%s, %s, %s)"
+  data = (_code, _name, _lastName,)
+  repository.executeQuery(sql,data) 
+  return "student created successfully"
+  
+@app.route('/student/<id>', methods=['PUT'])
+def update_student(id):
+  repository = Repository()
+  json_data = request.get_json(force=True)
+  _name = json_data['name']
+  _lastName = json_data['lastName']
+  sql = "UPDATE student SET student_name = %s , lstudent_ast_name = %s WHERE student_code = %s"
+  data = (_name, _lastName, id)
+  repository.executeQuery(sql,data) 
+  return "student updated successfully"
+
+@app.route('/student', methods=['GET'])
+def get_student():
+  repository = Repository()
+  results, row_headers= repository.executeSelectQuery("SELECT * FROM student") 
+  print(results)
+  json_data= []
+  for result in results:
+    print(result)
+    json_data.append(dict(zip(row_headers,result)))
+  return json.dumps(json_data)
+
+@app.route('/student/<id>', methods=['GET'])
+def find_student(id):
+  repository = Repository()
+  results, row_headers= repository.executeSelectQuery("SELECT * FROM student WHERE student_code={}".format(id)) 
+  print(results)
+  json_data= []
+  for result in results:
+    print(result)
+    json_data.append(dict(zip(row_headers,result)))
+  return json.dumps(json_data)
+
 @app.route('/synchronize', methods=['GET'])
 def synchronizeDB():
   repository = Repository()
